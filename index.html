@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Controle de Abastecimento - BenTech</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <style>
     html, body { height: 100%; margin: 0; padding: 0; background-color: #000; overflow-x: hidden; }
     body {
@@ -26,19 +27,35 @@
       width: 10px; height: 10px; border-radius: 50%; background: #ff4444;
       box-shadow: 0 0 10px #ff4444; animation: pulse-red 2s infinite;
     }
-    .online { background: #00ff88 !important; box-shadow: 0 0 15px #00ff88 !important; animation: pulse-green 2s infinite !important; }
+    .online {
+      background: #00ff88 !important; box-shadow: 0 0 15px #00ff88 !important;
+      animation: pulse-green 2s infinite !important;
+    }
     @keyframes pulse-red { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
     @keyframes pulse-green { 0%,100% { opacity: 0.8; } 50% { opacity: 1; } }
-    .card { background: rgba(51,51,51,0.7); padding: 20px; margin: 15px auto; border-radius: 15px; width: 90%; max-width: 400px; }
-    .button { display: inline-block; padding: 15px 25px; margin: 10px; border: none; border-radius: 10px; font-size: 18px; cursor: pointer; width: 40%; max-width: 200px; transition: all 0.2s; }
+    .card {
+      background: rgba(51,51,51,0.7); padding: 20px; margin: 15px auto;
+      border-radius: 15px; width: 90%; max-width: 400px;
+    }
+    .button {
+      display: inline-block; padding: 15px 25px; margin: 10px; border: none;
+      border-radius: 10px; font-size: 18px; cursor: pointer; width: 40%;
+      max-width: 200px; transition: all 0.2s;
+    }
     .on { background: #00ff88; color: #000; }
     .on:active { background: #00cc66; transform: scale(0.97); }
     .off { background: #ff4444; color: #fff; }
     .off:active { background: #cc3333; transform: scale(0.97); }
     select { padding: 10px; font-size: 16px; border-radius: 8px; width: 120px; }
     #msg, #saveMsg { margin-top: 10px; font-size: 16px; color: #fff; display: none; }
-    .bar { background: #555; border-radius: 10px; overflow: hidden; margin: 10px auto; height: 25px; width: 90%; max-width: 400px; }
-    .fill { background: #00aaff; height: 100%; width: 0%; text-align: center; line-height: 25px; color: #fff; transition: width 0.5s ease; }
+    .bar {
+      background: #555; border-radius: 10px; overflow: hidden;
+      margin: 10px auto; height: 25px; width: 90%; max-width: 400px;
+    }
+    .fill {
+      background: #00aaff; height: 100%; width: 0%; text-align: center;
+      line-height: 25px; color: #fff; transition: width 0.5s ease;
+    }
     .status-text { font-size: 18px; margin-top: 5px; }
     .inline-group { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 10px; }
   </style>
@@ -49,7 +66,6 @@
     <h1>Controle de Abastecimento</h1>
     <div id="statusDot" class="status-dot"></div>
   </div>
-
   <div class="card">
     <h2>Níveis de Reservatório</h2>
     <p>Caixa d'Água</p>
@@ -57,9 +73,7 @@
     <p>Reservatório</p>
     <div class="bar"><div id="reservoirLevel" class="fill">0%</div></div>
   </div>
-
   <p style="font-size:14px;">Obs: O reservatório precisa estar acima<br>de 25% para acionamento automático</p>
-
   <div class="card">
     <h2>Bomba Automática</h2>
     <p>Nível para ligar automaticamente</p>
@@ -75,7 +89,6 @@
     </div>
     <p id="saveMsg" class="status-text"></p>
   </div>
-
   <div class="card">
     <h2>Bomba Manual</h2>
     <button class="button on" onclick="sendCommand('pump:on')">Ligar</button>
@@ -83,17 +96,14 @@
     <p id="msg" class="status-text"></p>
     <p id="pumpStatus" class="status-text" style="color:#ff4444">Desligado</p>
   </div>
-
   <div class="card">
     <h2>Dispositivo Paralelo</h2>
     <button class="button on" onclick="sendCommand('device:on')">Ligar</button>
     <button class="button off" onclick="sendCommand('device:off')">Desligar</button>
     <p id="deviceStatus" class="status-text" style="color:#ff4444">Desligado</p>
   </div>
-
   <script>
-    // MUDE APENAS ESTA LINHA
-    const CLIENTE = "Tais";  // ← exatamente como no código do ESP32
+    const CLIENTE = "Tais";  // ← MUDE AQUI (ex: "David")
 
     const gateway = `ws://${window.location.hostname}/ws`;
     let ws;
@@ -140,8 +150,8 @@
         try { data = JSON.parse(event.data); }
         catch(e) { return; }
 
-        // FILTRA MENSAGENS DE OUTRAS PLACAS
-        if (data.client && data.client !== CLIENTE) return;
+        // FILTRA: ignora se não for deste cliente
+        if (data.client && data.client.toLowerCase() !== CLIENTE.toLowerCase()) return;
 
         setOnline();
 
@@ -173,9 +183,7 @@
     window.onload = () => {
       initWebSocket();
       setInterval(() => {
-        if (Date.now() - lastMessageTime > TIMEOUT) {
-          document.getElementById('statusDot').classList.remove('online');
-        }
+        if (Date.now() - lastMessageTime > TIMEOUT) document.getElementById('statusDot').classList.remove('online');
       }, 5000);
     };
   </script>
