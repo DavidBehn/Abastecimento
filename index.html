@@ -89,9 +89,9 @@
   <script>
     const mqttBroker = 'wss://broker.emqx.io:8084/mqtt';
     const clientId = 'web_' + Date.now();
-    const topicCmd = 'Bentech/Cliente[]/abastecimento/cmd';
-    const topicStatus = 'Bentech/Cliente[]/abastecimento/status';
-    const topicTrigger = 'Bentech/Cliente[]/abastecimento/trigger';
+    const topicCmd = 'Bentech/david/abastecimento/cmd';
+    const topicStatus = 'Bentech/david/abastecimento/status';
+    const topicTrigger = 'Bentech/david/abastecimento/trigger';
 
     const client = mqtt.connect(mqttBroker, { clientId, keepalive: 30, reconnectPeriod: 3000 });
     let lastMessageTime = 0;
