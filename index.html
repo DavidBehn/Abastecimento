@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Controle de Abastecimento - BenTech</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <style>
     html, body { height: 100%; margin: 0; padding: 0; background-color: #000; overflow-x: hidden; }
     body {
@@ -27,35 +26,19 @@
       width: 10px; height: 10px; border-radius: 50%; background: #ff4444;
       box-shadow: 0 0 10px #ff4444; animation: pulse-red 2s infinite;
     }
-    .online {
-      background: #00ff88 !important; box-shadow: 0 0 15px #00ff88 !important;
-      animation: pulse-green 2s infinite !important;
-    }
+    .online { background: #00ff88 !important; box-shadow: 0 0 15px #00ff88 !important; animation: pulse-green 2s infinite !important; }
     @keyframes pulse-red { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
     @keyframes pulse-green { 0%,100% { opacity: 0.8; } 50% { opacity: 1; } }
-    .card {
-      background: rgba(51,51,51,0.7); padding: 20px; margin: 15px auto;
-      border-radius: 15px; width: 90%; max-width: 400px;
-    }
-    .button {
-      display: inline-block; padding: 15px 25px; margin: 10px; border: none;
-      border-radius: 10px; font-size: 18px; cursor: pointer; width: 40%;
-      max-width: 200px; transition: all 0.2s;
-    }
+    .card { background: rgba(51,51,51,0.7); padding: 20px; margin: 15px auto; border-radius: 15px; width: 90%; max-width: 400px; }
+    .button { display: inline-block; padding: 15px 25px; margin: 10px; border: none; border-radius: 10px; font-size: 18px; cursor: pointer; width: 40%; max-width: 200px; transition: all 0.2s; }
     .on { background: #00ff88; color: #000; }
     .on:active { background: #00cc66; transform: scale(0.97); }
     .off { background: #ff4444; color: #fff; }
     .off:active { background: #cc3333; transform: scale(0.97); }
     select { padding: 10px; font-size: 16px; border-radius: 8px; width: 120px; }
     #msg, #saveMsg { margin-top: 10px; font-size: 16px; color: #fff; display: none; }
-    .bar {
-      background: #555; border-radius: 10px; overflow: hidden;
-      margin: 10px auto; height: 25px; width: 90%; max-width: 400px;
-    }
-    .fill {
-      background: #00aaff; height: 100%; width: 0%; text-align: center;
-      line-height: 25px; color: #fff; transition: width 0.5s ease;
-    }
+    .bar { background: #555; border-radius: 10px; overflow: hidden; margin: 10px auto; height: 25px; width: 90%; max-width: 400px; }
+    .fill { background: #00aaff; height: 100%; width: 0%; text-align: center; line-height: 25px; color: #fff; transition: width 0.5s ease; }
     .status-text { font-size: 18px; margin-top: 5px; }
     .inline-group { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 10px; }
   </style>
@@ -95,32 +78,25 @@
 
   <div class="card">
     <h2>Bomba Manual</h2>
-    <button class="button on" onclick="sendCommand('pump:on', true)">Ligar</button>
-    <button class="button off" onclick="sendCommand('pump:off', false)">Desligar</button>
+    <button class="button on" onclick="sendCommand('pump:on')">Ligar</button>
+    <button class="button off" onclick="sendCommand('pump:off')">Desligar</button>
     <p id="msg" class="status-text"></p>
     <p id="pumpStatus" class="status-text" style="color:#ff4444">Desligado</p>
   </div>
 
   <div class="card">
     <h2>Dispositivo Paralelo</h2>
-    <button class="button on" onclick="sendCommand('device:on', true, 'deviceStatus')">Ligar</button>
-    <button class="button off" onclick="sendCommand('device:off', false, 'deviceStatus')">Desligar</button>
+    <button class="button on" onclick="sendCommand('device:on')">Ligar</button>
+    <button class="button off" onclick="sendCommand('device:off')">Desligar</button>
     <p id="deviceStatus" class="status-text" style="color:#ff4444">Desligado</p>
   </div>
 
   <script>
-    // MUDE APENAS ESTA LINHA COM O NOME DO CLIENTE
-    const CLIENTE = "Tais"; // ← MUDE AQUI
+    // MUDE APENAS ESTA LINHA
+    const CLIENTE = "Tais";  // ← exatamente como no código do ESP32
 
-    // Tópicos gerados automaticamente
-    const base = "Bentech/" + CLIENTE + "/abastecimento";
-    const topicCmd     = base + "/cmd";
-    const topicStatus  = base + "/status";
-    const topicTrigger = base + "/trigger";
-
-    // Conexão WebSocket local (para bentech.local)
-    var gateway = `ws://${window.location.hostname}/ws`;
-    var websocket;
+    const gateway = `ws://${window.location.hostname}/ws`;
+    let ws;
     let lastMessageTime = 0;
     const TIMEOUT = 10000;
 
@@ -128,11 +104,11 @@
       if ("vibrate" in navigator) navigator.vibrate(50);
     }
 
-    function showTempMessage(id, text, time = 2000) {
+    function showTempMessage(id, text) {
       const el = document.getElementById(id);
       el.innerText = text;
       el.style.display = "block";
-      setTimeout(() => el.style.display = "none", time);
+      setTimeout(() => el.style.display = "none", 2000);
     }
 
     function updateBar(id, v) {
@@ -153,35 +129,19 @@
       lastMessageTime = Date.now();
     }
 
-    function checkStatus() {
-      if (Date.now() - lastMessageTime > TIMEOUT) {
-        document.getElementById('statusDot').classList.remove('online');
-      }
-    }
-
-    // INÍCIO DO WEBSOCKET LOCAL
     function initWebSocket() {
-      websocket = new WebSocket(gateway);
-      websocket.onopen = () => {
-        console.log('WebSocket local conectado');
+      ws = new WebSocket(gateway);
+      ws.onopen = () => {
+        console.log("WebSocket conectado");
         setOnline();
       };
-      websocket.onclose = () => {
-        console.log('WebSocket desconectado - reconectando...');
-        setTimeout(initWebSocket, 2000);
-      };
-      websocket.onmessage = (event) => {
+      ws.onmessage = (event) => {
         let data;
         try { data = JSON.parse(event.data); }
         catch(e) { return; }
 
-        // FILTRA: ignora mensagens que não são deste cliente
-        if (data.client && data.client.toLowerCase() !== CLIENTE.toLowerCase()) {
-          return;
-        }
-
-        // Remove o campo client (opcional)
-        delete data.client;
+        // FILTRA MENSAGENS DE OUTRAS PLACAS
+        if (data.client && data.client !== CLIENTE) return;
 
         setOnline();
 
@@ -190,35 +150,34 @@
         if (data.pumpStatus !== undefined) updateStatus('pumpStatus', data.pumpStatus);
         if (data.deviceStatus !== undefined) updateStatus('deviceStatus', data.deviceStatus);
         if (data.triggerLevel !== undefined) {
-          let val = data.triggerLevel == 100 ? 99 : data.triggerLevel;
-          document.getElementById("selector").value = val;
+          document.getElementById("selector").value = data.triggerLevel == 100 ? 99 : data.triggerLevel;
         }
-        if (data.Msg) showTempMessage('msg', data.Msg, 2000);
-        if (data.saveMsg) showTempMessage('saveMsg', data.saveMsg, 2000);
+        if (data.Msg) showTempMessage('msg', data.Msg);
+        if (data.saveMsg) showTempMessage('saveMsg', data.saveMsg);
       };
+      ws.onclose = () => setTimeout(initWebSocket, 2000);
     }
 
-    function sendCommand(cmd, state, statusId = 'pumpStatus') {
+    function sendCommand(cmd) {
       vibrateDevice();
-      if (websocket && websocket.readyState === WebSocket.OPEN) {
-        websocket.send(cmd);
-      }
-      if (statusId) updateStatus(statusId, state);
+      if (ws && ws.readyState === WebSocket.OPEN) ws.send(cmd);
     }
 
     function saveValue() {
       const val = document.getElementById("selector").value;
       vibrateDevice();
-      if (websocket && websocket.readyState === WebSocket.OPEN) {
-        websocket.send("save:" + val);
-      }
-      showTempMessage('saveMsg', 'Salvo!', 2000);
+      if (ws && ws.readyState === WebSocket.OPEN) ws.send("save:" + val);
+      showTempMessage('saveMsg', 'Salvo!');
     }
 
-    window.addEventListener('load', () => {
+    window.onload = () => {
       initWebSocket();
-      setInterval(checkStatus, 5000);
-    });
+      setInterval(() => {
+        if (Date.now() - lastMessageTime > TIMEOUT) {
+          document.getElementById('statusDot').classList.remove('online');
+        }
+      }, 5000);
+    };
   </script>
 </body>
 </html>
