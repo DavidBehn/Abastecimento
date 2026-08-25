@@ -7,214 +7,121 @@
   <link rel="shortcut icon" href="https://davidbehn.github.io/bentech-assets/favicon.ico" type="image/x-icon">
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      background-color: #000;
-      overflow-x: hidden;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      color: #fff;
-      text-align: center;
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
-      background:
-        linear-gradient(rgba(0,0,0,0.70), rgba(0,0,0,0.70)),
-        url('https://davidbehn.github.io/bentech-assets/bg.jpg');
-      background-repeat: no-repeat;
-      background-position: center top;
-      background-size: cover;
-      background-attachment: scroll;
-      transform: translateZ(0);
-      will-change: background-position;
-    }
-    @supports (-webkit-touch-callout: none) {
-      html, body { height: -webkit-fill-available; }
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      background: rgba(17, 17, 17, 0.9);
-      padding: 10px 15px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 15px auto;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 405px;
-      box-sizing: border-box;
-    }
-    .header img {
-      width: 40px;
-      height: 40px;
-      margin-right: 10px;
-    }
-    h1 {
-      color: #ffffff;
-      font-size: 20px;
-      margin: 0;
-      text-align: center;
-    }
-    .card {
-      background: rgba(51, 51, 51, 0.7);
-      padding: 20px;
-      margin: 15px auto;
-      border-radius: 15px;
-      width: 90%;
-      max-width: 400px;
-      box-sizing: border-box;
-    }
-    .button {
-      display: inline-block;
-      padding: 15px 25px;
-      margin: 10px;
-      border: none;
-      border-radius: 10px;
-      font-size: 18px;
-      cursor: pointer;
-      width: 40%;
-      max-width: 200px;
-      transition: all 0.2s ease;
-      font-family: Arial, sans-serif;
-    }
-    .on {
-      background: #00ff88;
-      color: #000;
-    }
-    .on:active {
-      background: #00cc66;
-      transform: scale(0.97);
-    }
-    .off {
-      background: #ff4444;
-      color: #fff;
-    }
-    .off:active {
-      background: #cc3333;
-      transform: scale(0.97);
-    }
-    select, input[type="time"] {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      margin: 5px;
-      border: none;
-      background: #222;
-      color: #fff;
-      font-family: Arial, sans-serif;   /* ← força a mesma fonte */
-    }
-    #msg, #saveMsg, #scheduleMsg {
-      margin-top: 10px;
-      font-size: 16px;
-      color: #ffffff;
-      display: none;
-    }
-    .bar {
-      background: #555;
-      border-radius: 10px;
-      overflow: hidden;
-      margin: 10px auto;
-      height: 25px;
-      width: 90%;
-      max-width: 400px;
-    }
-    .fill {
-      background: #00aaff;
-      height: 100%;
-      width: 0%;
-      text-align: center;
-      line-height: 25px;
-      color: #fff;
-      transition: width 0.5s ease;
-      font-family: Arial, sans-serif;   /* ← força a mesma fonte nos % */
-    }
-    .status-text {
-      font-size: 18px;
-      margin-top: 5px;
-      font-family: Arial, sans-serif;
-    }
-    .inline-group {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    .inline-group button {
-      margin-left: 5px;
-    }
-    .time-group {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 15px 0;
-    }
-    .time-group label {
-      font-size: 16px;
-    }
-    @media (min-width: 800px) {
-      .card {
-        width: 50%;
-        max-width: 400px;
-      }
-      .header img {
-        width: 50px;
-        height: 50px;
-      }
-      h1 {
-        font-size: 24px;
-      }
-    }
-    /* ===== TELA DE BLOQUEIO ===== */
-    #lockedScreen {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #ffffff;
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: #073fa3;
-      font-family: Arial, sans-serif;
-    }
-    #lockedScreen h1 {
-      font-size: 28px;
-      font-weight: bold;
-      margin: 0;
-      text-align: center;
-      padding: 20px;
-      color: #073fa3;
-    }
+html,body{height:100%;margin:0;padding:0;background:#0a1628;overflow-x:hidden}
+body{
+  font-family:Arial,sans-serif;color:#e8f4fc;text-align:center;
+  min-height:100vh;min-height:-webkit-fill-available;
+  background:linear-gradient(180deg,rgba(8,28,48,.75),rgba(4,18,36,.82)),url('https://davidbehn.github.io/bentech-assets/bg.jpg');
+  background-size:cover;background-position:center top;background-repeat:no-repeat;
+  padding:12px 12px 28px
+}
+@supports (-webkit-touch-callout:none){html,body{height:-webkit-fill-available}}
+.wrap{max-width:400px;margin:0 auto}
+.header{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(120,190,255,.22);
+  border-radius:14px;padding:12px 14px;margin-bottom:14px;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)
+}
+.header img{width:40px;height:40px;object-fit:contain;display:block;border-radius:0;flex-shrink:0}
+h1{margin:0;font-size:17px;font-weight:600;color:#f0f8ff;letter-spacing:.2px}
+.card{
+  background:rgba(255,255,255,.07);border:1px solid rgba(120,190,255,.18);
+  border-radius:14px;padding:14px 14px 12px;margin-bottom:12px;text-align:left;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)
+}
+.card h2{
+  margin:0 0 12px;font-size:14px;font-weight:600;color:#b8dcf0;
+  display:flex;align-items:center;gap:7px
+}
+.card h2::before{content:"";width:3px;height:14px;background:#4db8ff;border-radius:2px}
+.level{margin-bottom:12px}
+.level:last-child{margin-bottom:0}
+.level-top{display:flex;justify-content:space-between;font-size:13px;color:#9ec8e0;margin-bottom:5px}
+.level-top b{color:#e8f4fc;font-weight:600}
+.bar{background:rgba(0,40,80,.35);border-radius:8px;height:20px;overflow:hidden}
+.fill{
+  height:100%;width:0%;background:linear-gradient(90deg,#1a8fd9,#4ec8ff);
+  border-radius:8px;font-size:11px;font-weight:600;line-height:20px;color:#fff;
+  text-align:center;transition:width .4s ease
+}
+.hint{font-size:12px;color:#8ab4cc;margin:0 0 12px;line-height:1.4}
+.row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px}
+select,input[type=time]{
+  font-family:Arial,sans-serif;font-size:14px;color:#e8f4fc;
+  background:rgba(0,30,60,.4);border:1px solid rgba(120,190,255,.25);
+  border-radius:10px;padding:10px 12px;outline:none
+}
+select{min-width:110px;flex:1;max-width:160px;cursor:pointer}
+input[type=time]{width:112px}
+.btn{
+  font-family:Arial,sans-serif;font-size:14px;font-weight:600;border:none;border-radius:10px;
+  padding:11px 18px;cursor:pointer;min-width:100px;transition:opacity .15s,transform .12s
+}
+.btn:active{opacity:.85;transform:scale(.97)}
+.btn-on{background:#3dd68c;color:#05331c}
+.btn-off{background:#ff6b6b;color:#fff}
+.btn-save{background:#4db8ff;color:#03243a;min-width:88px}
+.msg{
+  display:none;margin-top:8px;font-size:12px;text-align:center;
+  background:rgba(77,184,255,.15);border:1px solid rgba(77,184,255,.3);
+  border-radius:8px;padding:7px 10px;color:#d6eefc
+}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;margin-top:10px;
+  padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600
+}
+.pill .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+.on{background:rgba(61,214,140,.18);color:#3dd68c}
+.off{background:rgba(255,107,107,.16);color:#ff8a8a}
+.times{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:10px 0 4px}
+.times label{font-size:12px;color:#9ec8e0;display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+.center{text-align:center}
+.sub{margin:0 0 8px;font-size:12px;color:#8ab4cc}
+
+/* Tela de bloqueio */
+#lockedScreen{
+  display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+  background:#fff;z-index:9999;justify-content:center;align-items:center;
+  flex-direction:column;color:#073fa3;font-family:Arial,sans-serif
+}
+#lockedScreen h1{
+  font-size:22px;font-weight:bold;margin:0;text-align:center;
+  padding:20px;color:#073fa3
+}
   </style>
 </head>
 <body>
   <!-- Tela de bloqueio -->
   <div id="lockedScreen">
-    <h1>Entre em contato com a <br>BenTech</h1>
+    <h1>Entre em contato com a<br>BenTech</h1>
   </div>
+
   <!-- Conteúdo normal -->
-  <div id="mainContent">
+  <div id="mainContent" class="wrap">
     <div class="header">
       <img src="https://davidbehn.github.io/bentech-assets/logo.png" alt="Logo BenTech">
       <h1>Controle de Abastecimento</h1>
     </div>
+
     <div class="card">
-      <h2>Níveis de Reservatório</h2>
-      <p>Caixa d'Água</p>
-      <div class="bar"><div id="waterTankLevel" class="fill">0%</div></div>
-      <p>Reservatório</p>
-      <div class="bar"><div id="reservoirLevel" class="fill">0%</div></div>
+      <h2>Níveis</h2>
+      <div class="level">
+        <div class="level-top"><span>Caixa d'Água</span><b id="waterTankValue">0%</b></div>
+        <div class="bar"><div id="waterTankLevel" class="fill">0%</div></div>
+      </div>
+      <div class="level">
+        <div class="level-top"><span>Reservatório</span><b id="reservoirValue">0%</b></div>
+        <div class="bar"><div id="reservoirLevel" class="fill">0%</div></div>
+      </div>
     </div>
-    <p>Obs: O reservatório precisa estar acima<br>de 25% para acionamento automático</p>
+
+    <p class="hint">Reservatório acima de 25% para acionamento automático</p>
+
     <div class="card">
       <h2>Bomba Automática</h2>
-      <p>Nível da Caixa D'água para Acionamento</p>
-      <div class="inline-group">
+      <p class="sub">Nível da caixa para ligar a bomba</p>
+      <div class="row">
         <select id="selector">
           <option value="0">0%</option>
           <option value="25">25%</option>
@@ -222,43 +129,57 @@
           <option value="75">75%</option>
           <option value="99">OFF</option>
         </select>
-        <button class="button on" onclick="saveValue()">Salvar</button>
+        <button class="btn btn-save" onclick="saveValue()">Salvar</button>
       </div>
-      <p id="saveMsg" class="status-text"></p>
+      <p id="saveMsg" class="msg"></p>
     </div>
-    <!-- Horário de Funcionamento -->
+
     <div class="card">
-      <h2>Período de Funcionamento</h2>
-      <p>Limita o acionamento do Sistema</p>
-     
-      <div class="inline-group">
+      <h2>Horário de Funcionamento</h2>
+      <p class="sub">Limita quando o sistema pode acionar</p>
+      <div class="row">
         <select id="scheduleEnable">
           <option value="0">Desativado</option>
           <option value="1">Ativado</option>
         </select>
       </div>
-      <div class="time-group">
-        <label>Das: <input type="time" id="startTime" value="06:00"></label>
-        <label>Até: <input type="time" id="endTime" value="23:00"></label>
+      <div class="times">
+        <label>Das<input type="time" id="startTime" value="06:00"></label>
+        <label>Até<input type="time" id="endTime" value="23:00"></label>
       </div>
-      <button class="button on" onclick="saveSchedule()">Salvar</button>
-      <p id="scheduleMsg" class="status-text"></p>
-      <p id="scheduleStatus" class="status-text" style="color:#ff4444">Desativado</p>
+      <div class="row" style="margin-top:8px">
+        <button class="btn btn-save" onclick="saveSchedule()">Salvar</button>
+      </div>
+      <p id="scheduleMsg" class="msg"></p>
+      <div class="center">
+        <span id="scheduleStatus" class="pill off"><span class="d"></span>Desativado</span>
+      </div>
     </div>
+
     <div class="card">
       <h2>Bomba Manual</h2>
-      <button class="button on" onclick="sendCommand('pump:on', true)">Ligar</button>
-      <button class="button off" onclick="sendCommand('pump:off', false)">Desligar</button>
-      <p id="msg" class="status-text"></p>
-      <p id="pumpStatus" class="status-text" style="color:#ff4444">Desligado</p>
+      <div class="row">
+        <button class="btn btn-on" onclick="sendCommand('pump:on', true)">Ligar</button>
+        <button class="btn btn-off" onclick="sendCommand('pump:off', false)">Desligar</button>
+      </div>
+      <p id="msg" class="msg"></p>
+      <div class="center">
+        <span id="pumpStatus" class="pill off"><span class="d"></span>Desligado</span>
+      </div>
     </div>
+
     <div class="card">
       <h2>Dispositivo Paralelo</h2>
-      <button class="button on" onclick="sendCommand('device:on', true, 'deviceStatus')">Ligar</button>
-      <button class="button off" onclick="sendCommand('device:off', false, 'deviceStatus')">Desligar</button>
-      <p id="deviceStatus" class="status-text" style="color:#ff4444">Desligado</p>
+      <div class="row">
+        <button class="btn btn-on" onclick="sendCommand('device:on', true, 'deviceStatus')">Ligar</button>
+        <button class="btn btn-off" onclick="sendCommand('device:off', false, 'deviceStatus')">Desligar</button>
+      </div>
+      <div class="center">
+        <span id="deviceStatus" class="pill off"><span class="d"></span>Desligado</span>
+      </div>
     </div>
   </div>
+
   <script>
     const CLIENTE = "David";
     const base = `Bentech/${CLIENTE}/abastecimento`;
@@ -277,6 +198,7 @@
     };
     const client = mqtt.connect(mqttBroker, options);
     let isLocked = false;
+
     function updateLockedUI(locked) {
       isLocked = locked;
       const lockedScreen = document.getElementById('lockedScreen');
@@ -289,6 +211,7 @@
         mainContent.style.display = 'block';
       }
     }
+
     client.on('connect', () => {
       console.log("MQTT WebSocket conectado!");
       client.subscribe([topicStatus, topicTrigger, topicLocked], (err) => {
@@ -296,13 +219,16 @@
         client.publish(topicCmd, "get_trigger");
       });
     });
+
     client.on('error', (err) => {
       console.error("Erro MQTT:", err);
       showTempMessage('msg', 'Erro de conexão MQTT', 3000);
     });
+
     client.on('message', (topic, message) => {
       const payload = message.toString();
       console.log(topic, payload);
+
       if (topic === topicStatus) {
         try {
           const data = JSON.parse(payload);
@@ -319,8 +245,8 @@
           if (data.scheduleEnabled !== undefined) {
             document.getElementById("scheduleEnable").value = data.scheduleEnabled ? "1" : "0";
             let statusEl = document.getElementById("scheduleStatus");
-            statusEl.innerText = data.scheduleEnabled ? "Ativado" : "Desativado";
-            statusEl.style.color = data.scheduleEnabled ? "#00ff88" : "#ff4444";
+            statusEl.innerHTML = '<span class="d"></span>' + (data.scheduleEnabled ? "Ativado" : "Desativado");
+            statusEl.className = "pill " + (data.scheduleEnabled ? "on" : "off");
           }
           if (data.scheduleStart !== undefined) {
             document.getElementById("startTime").value = data.scheduleStart;
@@ -335,15 +261,18 @@
           console.error("JSON inválido no status:", e);
         }
       }
+
       if (topic === topicLocked) {
         updateLockedUI(payload === "1" || payload === "true");
       }
+
       if (topic === topicTrigger) {
         let val = parseInt(payload, 10);
         if (isNaN(val)) val = 25;
         document.getElementById('selector').value = (val >= 99 ? 99 : val);
       }
     });
+
     function sendCommand(cmd, state, statusId = 'pumpStatus') {
       if (isLocked) {
         showTempMessage('msg', 'Dispositivo bloqueado', 2500);
@@ -356,6 +285,7 @@
         showTempMessage('msg', 'Sem conexão MQTT', 3000);
       }
     }
+
     function saveValue() {
       if (isLocked) {
         showTempMessage('saveMsg', 'Dispositivo bloqueado', 2500);
@@ -370,6 +300,7 @@
       vibrateDevice();
       showTempMessage('saveMsg', 'Salvo!', 2000);
     }
+
     function saveSchedule() {
       if (isLocked) {
         showTempMessage('scheduleMsg', 'Dispositivo bloqueado', 2500);
@@ -386,9 +317,11 @@
       client.publish(topicCmd, "schedule:" + enabled + ":" + start + ":" + end);
       showTempMessage('scheduleMsg', 'Salvo!', 2000);
     }
+
     function vibrateDevice() {
       if ("vibrate" in navigator) navigator.vibrate(50);
     }
+
     function showTempMessage(id, text, time = 2000) {
       const el = document.getElementById(id);
       if (!el) return;
@@ -396,16 +329,23 @@
       el.style.display = 'block';
       setTimeout(() => el.style.display = 'none', time);
     }
+
     function updateBar(id, v) {
       const el = document.getElementById(id);
       v = Math.round(v);
       el.style.width = v + '%';
       el.textContent = v + '%';
+      if (id === 'waterTankLevel') {
+        document.getElementById('waterTankValue').textContent = v + '%';
+      } else if (id === 'reservoirLevel') {
+        document.getElementById('reservoirValue').textContent = v + '%';
+      }
     }
+
     function updateStatus(id, state) {
       const el = document.getElementById(id);
-      el.innerText = state ? 'Ligado' : 'Desligado';
-      el.style.color = state ? '#00ff88' : '#ff4444';
+      el.innerHTML = '<span class="d"></span>' + (state ? 'Ligado' : 'Desligado');
+      el.className = 'pill ' + (state ? 'on' : 'off');
     }
   </script>
 </body>
