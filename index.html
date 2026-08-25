@@ -58,7 +58,7 @@
       text-align: center;
     }
     .card {
-      background: rgba(51, 51, 51, de 0.7);
+      background: rgba(51, 51, 51, 0.7);
       padding: 20px;
       margin: 15px auto;
       border-radius: 15px;
@@ -228,7 +228,7 @@
       <p id="saveMsg" class="status-text"></p>
     </div>
 
-    <!-- Horário de Funcionamento (igual à página local) -->
+    <!-- Horário de Funcionamento -->
     <div class="card">
       <h2>Horário de Funcionamento</h2>
       <p>Para acionamento automático</p>
@@ -287,7 +287,6 @@
     const client = mqtt.connect(mqttBroker, options);
     let isLocked = false;
 
-    // ===== Controla a tela de bloqueio =====
     function updateLockedUI(locked) {
       isLocked = locked;
       const lockedScreen = document.getElementById('lockedScreen');
@@ -319,7 +318,6 @@
       const payload = message.toString();
       console.log(topic, payload);
 
-      // Status completo
       if (topic === topicStatus) {
         try {
           const data = JSON.parse(payload);
@@ -332,12 +330,11 @@
           if (data.pumpStatus !== undefined) updateStatus('pumpStatus', data.pumpStatus);
           if (data.deviceStatus !== undefined) updateStatus('deviceStatus', data.deviceStatus);
 
-          // Mensagens de bloqueio da bomba
           if (data.Msg) {
             showTempMessage('msg', data.Msg, 3000);
           }
 
-          // === Status do horário de funcionamento (quando o firmware publicar) ===
+          // Status do horário
           if (data.scheduleEnabled !== undefined) {
             document.getElementById("scheduleEnable").value = data.scheduleEnabled ? "1" : "0";
             let statusEl = document.getElementById("scheduleStatus");
@@ -358,7 +355,6 @@
         }
       }
 
-      // Tópico específico de trava
       if (topic === topicLocked) {
         updateLockedUI(payload === "1" || payload === "true");
       }
@@ -398,7 +394,6 @@
       showTempMessage('saveMsg', 'Salvo!', 2000);
     }
 
-    // === Função para salvar o horário de funcionamento (mesmo formato da página local) ===
     function saveSchedule() {
       if (isLocked) {
         showTempMessage('scheduleMsg', 'Dispositivo bloqueado', 2500);
@@ -413,7 +408,6 @@
       let start = document.getElementById("startTime").value;
       let end = document.getElementById("endTime").value;
 
-      // Formato idêntico ao WebSocket local: schedule:1:06:00:23:00
       client.publish(topicCmd, "schedule:" + enabled + ":" + start + ":" + end);
       showTempMessage('scheduleMsg', 'Salvo!', 2000);
     }
