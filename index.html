@@ -7,11 +7,11 @@
 <link rel="shortcut icon" href="https://davidbehn.github.io/bentech-assets/favicon.ico" type="image/x-icon">
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 <style>
-html,body{height:100%;margin:0;padding:0;background:#0a1628;overflow-x:hidden}
+html,body{height:100%;margin:0;padding:0;background:#060b12;overflow-x:hidden}
 body{
-  font-family:Arial,sans-serif;color:#e8f4fc;text-align:center;
+  font-family:Arial,sans-serif;color:#eef5fb;text-align:center;
   min-height:100vh;min-height:-webkit-fill-available;
-  background:linear-gradient(180deg,rgba(8,28,48,.75),rgba(4,18,36,.82)),url('https://davidbehn.github.io/bentech-assets/bg.jpg');
+  background:linear-gradient(180deg,rgba(6,12,22,.65),rgba(3,6,12,.75)),url('https://davidbehn.github.io/bentech-assets/bg.jpg');
   background-size:cover;background-position:center top;background-repeat:no-repeat;
   padding:12px 12px 28px
 }
@@ -19,14 +19,14 @@ body{
 .wrap{max-width:400px;margin:0 auto}
 .header{
   display:flex;align-items:center;justify-content:center;gap:10px;
-  background:rgba(255,255,255,.08);border:1px solid rgba(120,190,255,.22);
+  background:rgba(255,255,255,.07);border:1px solid rgba(120,190,255,.28);
   border-radius:14px;padding:12px 14px;margin-bottom:14px;
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)
 }
 .header img{width:40px;height:40px;object-fit:contain;display:block;border-radius:0;flex-shrink:0}
 h1{margin:0;font-size:17px;font-weight:600;color:#f0f8ff;letter-spacing:.2px}
 .card{
-  background:rgba(255,255,255,.07);border:1px solid rgba(120,190,255,.18);
+  background:rgba(255,255,255,.06);border:1px solid rgba(120,190,255,.22);
   border-radius:14px;padding:14px 14px 12px;margin-bottom:12px;text-align:left;
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)
 }
@@ -35,21 +35,30 @@ h1{margin:0;font-size:17px;font-weight:600;color:#f0f8ff;letter-spacing:.2px}
   display:flex;align-items:center;gap:7px
 }
 .card h2::before{content:"";width:3px;height:14px;background:#4db8ff;border-radius:2px}
+.card-title{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin:0 0 12px
+}
+.card-title h2{
+  margin:0;font-size:14px;font-weight:600;color:#b8dcf0;
+  display:flex;align-items:center;gap:7px
+}
+.card-title h2::before{content:"";width:3px;height:14px;background:#4db8ff;border-radius:2px}
 .level{margin-bottom:12px}
 .level:last-child{margin-bottom:0}
 .level-top{display:flex;justify-content:space-between;font-size:13px;color:#9ec8e0;margin-bottom:5px}
-.level-top b{color:#e8f4fc;font-weight:600}
+.level-top b{color:#eef5fb;font-weight:600}
 .bar{background:rgba(0,40,80,.35);border-radius:8px;height:20px;overflow:hidden}
 .fill{
   height:100%;width:0%;background:linear-gradient(90deg,#1a8fd9,#4ec8ff);
   border-radius:8px;font-size:11px;font-weight:600;line-height:20px;color:#fff;
   text-align:center;transition:width .4s ease
 }
-.hint{font-size:12px;color:#fefec3;margin:0 0 12px;line-height:1.4}
-.row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px}
+.hint{font-size:12px;color:#ffffff;margin:0 0 12px;line-height:1.4}
+.row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:20px}
 select,input[type=time]{
-  font-family:Arial,sans-serif;font-size:14px;color:#e8f4fc;
-  background:rgba(0,30,60,.4);border:1px solid rgba(120,190,255,.25);
+  font-family:Arial,sans-serif;font-size:14px;color:#eef5fb;
+  background:rgba(0,40,80,.35);border:1px solid rgba(120,190,255,.28);
   border-radius:10px;padding:10px 12px;outline:none
 }
 select{min-width:110px;flex:1;max-width:160px;cursor:pointer}
@@ -61,14 +70,14 @@ input[type=time]{width:112px}
 .btn:active{opacity:.85;transform:scale(.97)}
 .btn-on{background:#3dd68c;color:#05331c}
 .btn-off{background:#ff6b6b;color:#fff}
-.btn-save{background:#4db8ff;color:#03243a;min-width:88px}
+.btn-save{background:#4db8ff;color:#043657;min-width:88px}
 .msg{
   display:none;margin-top:8px;font-size:12px;text-align:center;
-  background:rgba(77,184,255,.15);border:1px solid rgba(77,184,255,.3);
+  background:rgba(77,184,255,.14);border:1px solid rgba(77,184,255,.32);
   border-radius:8px;padding:7px 10px;color:#d6eefc
 }
 .pill{
-  display:inline-flex;align-items:center;gap:6px;margin-top:10px;
+  display:inline-flex;align-items:center;gap:6px;margin:0;flex-shrink:0;
   padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600
 }
 .pill .d{width:6px;height:6px;border-radius:50%;background:currentColor}
@@ -78,24 +87,24 @@ input[type=time]{width:112px}
 .times label{font-size:12px;color:#9ec8e0;display:flex;flex-direction:column;gap:5px;align-items:flex-start}
 .center{text-align:center}
 .sub{margin:0 0 8px;font-size:12px;color:#8ab4cc}
-/* Tela de bloqueio */
+/* Tela de bloqueio — mesmo visual da página locked do firmware */
 #lockedScreen{
   display:none;position:fixed;top:0;left:0;right:0;bottom:0;
-  background:#fff;z-index:9999;justify-content:center;align-items:center;
-  flex-direction:column;color:#073fa3;font-family:Arial,sans-serif
+  background-color:#060b12;z-index:9999;
+  justify-content:center;align-items:center;
+  flex-direction:column;color:#b8dcf0;font-family:Arial,sans-serif;
+  text-align:center
 }
-#lockedScreen h1{
-  font-size:22px;font-weight:bold;margin:0;text-align:center;
-  padding:20px;color:#073fa3
+#lockedScreen p{
+  color:#eef5fb;font-size:20px;font-weight:bold;margin:0;padding:20px
 }
 </style>
 </head>
 <body>
   <!-- Tela de bloqueio -->
   <div id="lockedScreen">
-    <h1>Entre em contato com a<br>BenTech</h1>
+    <p>Entre em contato com a<br>BenTech</p>
   </div>
-
   <!-- Conteúdo normal -->
   <div id="mainContent" class="wrap">
     <div class="header">
@@ -134,7 +143,10 @@ input[type=time]{width:112px}
     </div>
 
     <div class="card">
-      <h2>HORÁRIO DE FUNCIONAMENTO</h2>
+      <div class="card-title">
+        <h2>HORÁRIO DE FUNCIONAMENTO</h2>
+        <span id="scheduleStatus" class="pill off"><span class="d"></span>Desativado</span>
+      </div>
       <p class="sub">Limita quando o sistema pode acionar</p>
       <div class="row">
         <select id="scheduleEnable">
@@ -150,35 +162,31 @@ input[type=time]{width:112px}
         <button class="btn btn-save" onclick="saveSchedule()">Salvar</button>
       </div>
       <p id="scheduleMsg" class="msg"></p>
-      <div class="center">
-        <span id="scheduleStatus" class="pill off"><span class="d"></span>Desativado</span>
-      </div>
     </div>
 
     <div class="card">
-      <h2>BOMBA MANUAL</h2>
+      <div class="card-title">
+        <h2>BOMBA MANUAL</h2>
+        <span id="pumpStatus" class="pill off"><span class="d"></span>Desligado</span>
+      </div>
       <div class="row">
         <button class="btn btn-on" onclick="sendCommand('pump:on', true)">Ligar</button>
         <button class="btn btn-off" onclick="sendCommand('pump:off', false)">Desligar</button>
       </div>
       <p id="msg" class="msg"></p>
-      <div class="center">
-        <span id="pumpStatus" class="pill off"><span class="d"></span>Desligado</span>
-      </div>
     </div>
 
     <div class="card">
-      <h2>DISPOSITIVO PARALELO</h2>
+      <div class="card-title">
+        <h2>DISPOSITIVO PARALELO</h2>
+        <span id="deviceStatus" class="pill off"><span class="d"></span>Desligado</span>
+      </div>
       <div class="row">
         <button class="btn btn-on" onclick="sendCommand('device:on', true, 'deviceStatus')">Ligar</button>
         <button class="btn btn-off" onclick="sendCommand('device:off', false, 'deviceStatus')">Desligar</button>
       </div>
-      <div class="center">
-        <span id="deviceStatus" class="pill off"><span class="d"></span>Desligado</span>
-      </div>
     </div>
   </div>
-
   <script>
     const CLIENTE = "David";
     const base = `Bentech/${CLIENTE}/abastecimento`;
@@ -186,7 +194,6 @@ input[type=time]{width:112px}
     const topicStatus = `${base}/status`;
     const topicTrigger = `${base}/trigger`;
     const topicLocked = `${base}/locked`;
-
     const mqttBroker = 'wss://u4182f38.ala.us-east-1.emqxsl.com:8084/mqtt';
     const options = {
       clientId: 'web_' + Math.random().toString(16).substr(2, 8),
@@ -196,10 +203,8 @@ input[type=time]{width:112px}
       reconnectPeriod: 3000,
       clean: true
     };
-
     const client = mqtt.connect(mqttBroker, options);
     let isLocked = false;
-
     function updateLockedUI(locked) {
       isLocked = locked;
       const lockedScreen = document.getElementById('lockedScreen');
@@ -212,7 +217,6 @@ input[type=time]{width:112px}
         mainContent.style.display = 'block';
       }
     }
-
     client.on('connect', () => {
       console.log("MQTT WebSocket conectado!");
       client.subscribe([topicStatus, topicTrigger, topicLocked], (err) => {
@@ -220,20 +224,16 @@ input[type=time]{width:112px}
         client.publish(topicCmd, "get_trigger");
       });
     });
-
     client.on('error', (err) => {
       console.error("Erro MQTT:", err);
       showTempMessage('msg', 'Erro de conexão MQTT', 3000);
     });
-
     client.on('message', (topic, message) => {
       const payload = message.toString();
       console.log(topic, payload);
-
       if (topic === topicStatus) {
         try {
           const data = JSON.parse(payload);
-
           if (data.locked !== undefined) {
             updateLockedUI(data.locked === true || data.locked === "true");
           }
@@ -263,18 +263,15 @@ input[type=time]{width:112px}
           console.error("JSON inválido no status:", e);
         }
       }
-
       if (topic === topicLocked) {
         updateLockedUI(payload === "1" || payload === "true");
       }
-
       if (topic === topicTrigger) {
         let val = parseInt(payload, 10);
         if (isNaN(val)) val = 25;
         document.getElementById('selector').value = (val >= 99 ? 99 : val);
       }
     });
-
     function sendCommand(cmd, state, statusId = 'pumpStatus') {
       if (isLocked) {
         showTempMessage('msg', 'Dispositivo bloqueado', 2500);
@@ -287,7 +284,6 @@ input[type=time]{width:112px}
         showTempMessage('msg', 'Sem conexão MQTT', 3000);
       }
     }
-
     function saveValue() {
       if (isLocked) {
         showTempMessage('saveMsg', 'Dispositivo bloqueado', 2500);
@@ -302,7 +298,6 @@ input[type=time]{width:112px}
       vibrateDevice();
       showTempMessage('saveMsg', 'Salvo!', 2000);
     }
-
     function saveSchedule() {
       if (isLocked) {
         showTempMessage('scheduleMsg', 'Dispositivo bloqueado', 2500);
@@ -319,11 +314,9 @@ input[type=time]{width:112px}
       client.publish(topicCmd, "schedule:" + enabled + ":" + start + ":" + end);
       showTempMessage('scheduleMsg', 'Salvo!', 2000);
     }
-
     function vibrateDevice() {
       if ("vibrate" in navigator) navigator.vibrate(50);
     }
-
     function showTempMessage(id, text, time = 2000) {
       const el = document.getElementById(id);
       if (!el) return;
@@ -331,7 +324,6 @@ input[type=time]{width:112px}
       el.style.display = 'block';
       setTimeout(() => el.style.display = 'none', time);
     }
-
     function updateBar(id, v) {
       const el = document.getElementById(id);
       v = Math.round(v);
@@ -343,7 +335,6 @@ input[type=time]{width:112px}
         document.getElementById('reservoirValue').textContent = v + '%';
       }
     }
-
     function updateStatus(id, state) {
       const el = document.getElementById(id);
       el.innerHTML = '<span class="d"></span>' + (state ? 'Ligado' : 'Desligado');
