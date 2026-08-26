@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Controle de Abastecimento - BenTech</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="https://davidbehn.github.io/bentech-assets/favicon.ico" type="image/x-icon">
-  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-  <style>
+<meta charset="UTF-8">
+<title>Controle de Abastecimento - BenTech</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="https://davidbehn.github.io/bentech-assets/favicon.ico" type="image/x-icon">
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<style>
 html,body{height:100%;margin:0;padding:0;background:#0a1628;overflow-x:hidden}
 body{
   font-family:Arial,sans-serif;color:#e8f4fc;text-align:center;
@@ -45,7 +45,7 @@ h1{margin:0;font-size:17px;font-weight:600;color:#f0f8ff;letter-spacing:.2px}
   border-radius:8px;font-size:11px;font-weight:600;line-height:20px;color:#fff;
   text-align:center;transition:width .4s ease
 }
-.hint{font-size:12px;color:#8ab4cc;margin:0 0 12px;line-height:1.4}
+.hint{font-size:12px;color:#fefec3;margin:0 0 12px;line-height:1.4}
 .row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px}
 select,input[type=time]{
   font-family:Arial,sans-serif;font-size:14px;color:#e8f4fc;
@@ -88,21 +88,23 @@ input[type=time]{width:112px}
   font-size:22px;font-weight:bold;margin:0;text-align:center;
   padding:20px;color:#073fa3
 }
-  </style>
+</style>
 </head>
 <body>
   <!-- Tela de bloqueio -->
   <div id="lockedScreen">
     <h1>Entre em contato com a<br>BenTech</h1>
   </div>
+
   <!-- Conteúdo normal -->
   <div id="mainContent" class="wrap">
     <div class="header">
-      <img src="https://davidbehn.github.io/bentech-assets/logo.png" alt="Logo BenTech">
+      <img src="https://davidbehn.github.io/bentech-assets/logo.png" alt="BenTech">
       <h1>Controle de Abastecimento</h1>
     </div>
+
     <div class="card">
-      <h2>Níveis</h2>
+      <h2>NÍVEIS</h2>
       <div class="level">
         <div class="level-top"><span>Caixa d'Água</span><b id="waterTankValue">0%</b></div>
         <div class="bar"><div id="waterTankLevel" class="fill">0%</div></div>
@@ -112,9 +114,11 @@ input[type=time]{width:112px}
         <div class="bar"><div id="reservoirLevel" class="fill">0%</div></div>
       </div>
     </div>
-    <p class="hint">Reservatório acima de 25% para acionamento automático</p>
+
+    <p class="hint">Reservatório entre 50% a 100%, para acionamento automático</p>
+
     <div class="card">
-      <h2>Bomba Automática</h2>
+      <h2>BOMBA AUTOMÁTICA</h2>
       <p class="sub">Nível da caixa para ligar a bomba</p>
       <div class="row">
         <select id="selector">
@@ -128,8 +132,9 @@ input[type=time]{width:112px}
       </div>
       <p id="saveMsg" class="msg"></p>
     </div>
+
     <div class="card">
-      <h2>Horário de Funcionamento</h2>
+      <h2>HORÁRIO DE FUNCIONAMENTO</h2>
       <p class="sub">Limita quando o sistema pode acionar</p>
       <div class="row">
         <select id="scheduleEnable">
@@ -149,8 +154,9 @@ input[type=time]{width:112px}
         <span id="scheduleStatus" class="pill off"><span class="d"></span>Desativado</span>
       </div>
     </div>
+
     <div class="card">
-      <h2>Bomba Manual</h2>
+      <h2>BOMBA MANUAL</h2>
       <div class="row">
         <button class="btn btn-on" onclick="sendCommand('pump:on', true)">Ligar</button>
         <button class="btn btn-off" onclick="sendCommand('pump:off', false)">Desligar</button>
@@ -160,8 +166,9 @@ input[type=time]{width:112px}
         <span id="pumpStatus" class="pill off"><span class="d"></span>Desligado</span>
       </div>
     </div>
+
     <div class="card">
-      <h2>Dispositivo Paralelo</h2>
+      <h2>DISPOSITIVO PARALELO</h2>
       <div class="row">
         <button class="btn btn-on" onclick="sendCommand('device:on', true, 'deviceStatus')">Ligar</button>
         <button class="btn btn-off" onclick="sendCommand('device:off', false, 'deviceStatus')">Desligar</button>
@@ -171,6 +178,7 @@ input[type=time]{width:112px}
       </div>
     </div>
   </div>
+
   <script>
     const CLIENTE = "David";
     const base = `Bentech/${CLIENTE}/abastecimento`;
@@ -178,6 +186,7 @@ input[type=time]{width:112px}
     const topicStatus = `${base}/status`;
     const topicTrigger = `${base}/trigger`;
     const topicLocked = `${base}/locked`;
+
     const mqttBroker = 'wss://u4182f38.ala.us-east-1.emqxsl.com:8084/mqtt';
     const options = {
       clientId: 'web_' + Math.random().toString(16).substr(2, 8),
@@ -187,8 +196,10 @@ input[type=time]{width:112px}
       reconnectPeriod: 3000,
       clean: true
     };
+
     const client = mqtt.connect(mqttBroker, options);
     let isLocked = false;
+
     function updateLockedUI(locked) {
       isLocked = locked;
       const lockedScreen = document.getElementById('lockedScreen');
@@ -201,6 +212,7 @@ input[type=time]{width:112px}
         mainContent.style.display = 'block';
       }
     }
+
     client.on('connect', () => {
       console.log("MQTT WebSocket conectado!");
       client.subscribe([topicStatus, topicTrigger, topicLocked], (err) => {
@@ -208,16 +220,20 @@ input[type=time]{width:112px}
         client.publish(topicCmd, "get_trigger");
       });
     });
+
     client.on('error', (err) => {
       console.error("Erro MQTT:", err);
       showTempMessage('msg', 'Erro de conexão MQTT', 3000);
     });
+
     client.on('message', (topic, message) => {
       const payload = message.toString();
       console.log(topic, payload);
+
       if (topic === topicStatus) {
         try {
           const data = JSON.parse(payload);
+
           if (data.locked !== undefined) {
             updateLockedUI(data.locked === true || data.locked === "true");
           }
@@ -247,15 +263,18 @@ input[type=time]{width:112px}
           console.error("JSON inválido no status:", e);
         }
       }
+
       if (topic === topicLocked) {
         updateLockedUI(payload === "1" || payload === "true");
       }
+
       if (topic === topicTrigger) {
         let val = parseInt(payload, 10);
         if (isNaN(val)) val = 25;
         document.getElementById('selector').value = (val >= 99 ? 99 : val);
       }
     });
+
     function sendCommand(cmd, state, statusId = 'pumpStatus') {
       if (isLocked) {
         showTempMessage('msg', 'Dispositivo bloqueado', 2500);
@@ -268,6 +287,7 @@ input[type=time]{width:112px}
         showTempMessage('msg', 'Sem conexão MQTT', 3000);
       }
     }
+
     function saveValue() {
       if (isLocked) {
         showTempMessage('saveMsg', 'Dispositivo bloqueado', 2500);
@@ -282,6 +302,7 @@ input[type=time]{width:112px}
       vibrateDevice();
       showTempMessage('saveMsg', 'Salvo!', 2000);
     }
+
     function saveSchedule() {
       if (isLocked) {
         showTempMessage('scheduleMsg', 'Dispositivo bloqueado', 2500);
@@ -298,9 +319,11 @@ input[type=time]{width:112px}
       client.publish(topicCmd, "schedule:" + enabled + ":" + start + ":" + end);
       showTempMessage('scheduleMsg', 'Salvo!', 2000);
     }
+
     function vibrateDevice() {
       if ("vibrate" in navigator) navigator.vibrate(50);
     }
+
     function showTempMessage(id, text, time = 2000) {
       const el = document.getElementById(id);
       if (!el) return;
@@ -308,6 +331,7 @@ input[type=time]{width:112px}
       el.style.display = 'block';
       setTimeout(() => el.style.display = 'none', time);
     }
+
     function updateBar(id, v) {
       const el = document.getElementById(id);
       v = Math.round(v);
@@ -319,6 +343,7 @@ input[type=time]{width:112px}
         document.getElementById('reservoirValue').textContent = v + '%';
       }
     }
+
     function updateStatus(id, state) {
       const el = document.getElementById(id);
       el.innerHTML = '<span class="d"></span>' + (state ? 'Ligado' : 'Desligado');
