@@ -111,7 +111,6 @@ input[type=time]{width:112px}
       <img src="https://davidbehn.github.io/bentech-assets/logo.png" alt="BenTech">
       <h1>Controle de Abastecimento</h1>
     </div>
-
     <div class="card">
       <h2>NÍVEIS</h2>
       <div class="level">
@@ -123,9 +122,7 @@ input[type=time]{width:112px}
         <div class="bar"><div id="reservoirLevel" class="fill">0%</div></div>
       </div>
     </div>
-
     <p class="hint">Reservatório entre 50% a 100%, para acionamento automático</p>
-
     <div class="card">
       <h2>BOMBA AUTOMÁTICA</h2>
       <p class="sub">Nível da caixa para ligar a bomba</p>
@@ -141,7 +138,6 @@ input[type=time]{width:112px}
       </div>
       <p id="saveMsg" class="msg"></p>
     </div>
-
     <div class="card">
       <div class="card-title">
         <h2>HORÁRIO DE FUNCIONAMENTO</h2>
@@ -163,7 +159,6 @@ input[type=time]{width:112px}
       </div>
       <p id="scheduleMsg" class="msg"></p>
     </div>
-
     <div class="card">
       <div class="card-title">
         <h2>BOMBA MANUAL</h2>
@@ -175,7 +170,6 @@ input[type=time]{width:112px}
       </div>
       <p id="msg" class="msg"></p>
     </div>
-
     <div class="card">
       <div class="card-title">
         <h2>DISPOSITIVO PARALELO</h2>
@@ -244,6 +238,13 @@ input[type=time]{width:112px}
           if (data.Msg) {
             showTempMessage('msg', data.Msg, 3000);
           }
+          // NOVO: trata saveMsg do nível de acionamento (vindo da página local ou do próprio dispositivo)
+          if (data.saveMsg) {
+            showTempMessage('saveMsg', data.saveMsg, 2000);
+          }
+          if (data.triggerLevel !== undefined) {
+            document.getElementById('selector').value = (data.triggerLevel >= 99 ? 99 : data.triggerLevel);
+          }
           if (data.scheduleEnabled !== undefined) {
             document.getElementById("scheduleEnable").value = data.scheduleEnabled ? "1" : "0";
             let statusEl = document.getElementById("scheduleStatus");
@@ -296,6 +297,7 @@ input[type=time]{width:112px}
       const val = document.getElementById('selector').value;
       client.publish(topicCmd, `trigger:${val}`);
       vibrateDevice();
+      // Feedback imediato local; a confirmação cruzada também chegará via status (saveMsg)
       showTempMessage('saveMsg', 'Salvo!', 2000);
     }
     function saveSchedule() {
