@@ -7,86 +7,134 @@
 <link rel="shortcut icon" href="https://davidbehn.github.io/bentech-assets/favicon.ico" type="image/x-icon">
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 <style>
+:root{
+  --bg-0:#050a12;
+  --card:rgba(255,255,255,.055);
+  --card-strong:rgba(255,255,255,.08);
+  --border:rgba(125,195,255,.20);
+  --border-strong:rgba(125,195,255,.34);
+  --accent:#4fc3ff;
+  --accent-2:#1f8fe0;
+  --text:#eef6fc;
+  --text-dim:#bed3e0;
+  --text-faint:#eef6fc;
+  --ok:#3ddc97;
+  --ok-bg:rgba(61,220,151,.14);
+  --danger:#ff6b6b;
+  --danger-bg:rgba(255,107,107,.14);
+  --radius-lg:18px;
+  --radius-md:13px;
+  --radius-sm:9px;
+}
+*{box-sizing:border-box}
 html,body{height:100%;margin:0;padding:0;background:#060b12;overflow-x:hidden}
 body{
-  font-family:Arial,sans-serif;color:#eef5fb;text-align:center;
+  font-family:'Segoe UI',Roboto,Arial,sans-serif;color:var(--text);text-align:center;
   min-height:100vh;min-height:-webkit-fill-available;
   background:linear-gradient(180deg,rgba(6,12,22,.65),rgba(3,6,12,.75)),url('https://davidbehn.github.io/bentech-assets/bg.jpg');
   background-size:cover;background-position:center top;background-repeat:no-repeat;
-  padding:12px 12px 28px
+  padding:16px 14px 32px;
+  -webkit-font-smoothing:antialiased;
 }
 @supports (-webkit-touch-callout:none){html,body{height:-webkit-fill-available}}
-.wrap{max-width:400px;margin:0 auto}
+.wrap{max-width:420px;margin:0 auto}
+
+/* ===== Cabeçalho ===== */
 .header{
   display:flex;align-items:center;justify-content:center;gap:10px;
-  background:rgba(255,255,255,.07);border:1px solid rgba(120,190,255,.28);
-  border-radius:14px;padding:12px 14px;margin-bottom:14px;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)
+  background:var(--card-strong);border:1px solid var(--border-strong);
+  border-radius:var(--radius-lg);padding:12px 14px;margin-bottom:18px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
 }
 .header img{width:40px;height:40px;object-fit:contain;display:block;border-radius:0;flex-shrink:0}
-h1{margin:0;font-size:17px;font-weight:600;color:#f0f8ff;letter-spacing:.2px}
+.header h1{
+  margin:0;font-size:20px;font-weight:700;color:#f0f8ff;letter-spacing:.2px;
+  white-space:nowrap;line-height:1.2;
+}
+
+/* ===== Cartões ===== */
 .card{
-  background:rgba(255,255,255,.06);border:1px solid rgba(120,190,255,.22);
-  border-radius:14px;padding:14px 14px 12px;margin-bottom:12px;text-align:left;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:16px 16px 15px;margin-bottom:14px;text-align:left;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
 }
-.card h2{
-  margin:0 0 12px;font-size:14px;font-weight:600;color:#b8dcf0;
-  display:flex;align-items:center;gap:7px
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:4px}
+.card-title{display:flex;align-items:center;gap:9px;min-width:0}
+.card-icon{
+  width:30px;height:30px;flex-shrink:0;border-radius:9px;
+  background:linear-gradient(155deg, rgba(79,195,255,.22), rgba(79,195,255,.06));
+  border:1px solid rgba(125,195,255,.28);
+  display:flex;align-items:center;justify-content:center;color:var(--accent)
 }
-.card h2::before{content:"";width:3px;height:14px;background:#4db8ff;border-radius:2px}
-.card-title{
-  display:flex;align-items:center;justify-content:space-between;gap:8px;
-  margin:0 0 12px
+.card-title h2{margin:0;font-size:13.5px;font-weight:700;color:#dcecf7;letter-spacing:.3px;text-transform:uppercase}
+.card-desc{margin:2px 0 14px;font-size:12px;color:var(--text-dim);line-height:1.45}
+
+.pill{
+  display:inline-flex;align-items:center;gap:6px;flex-shrink:0;
+  padding:5px 11px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:.2px;
+  white-space:nowrap;
 }
-.card-title h2{
-  margin:0;font-size:14px;font-weight:600;color:#b8dcf0;
-  display:flex;align-items:center;gap:7px
-}
-.card-title h2::before{content:"";width:3px;height:14px;background:#4db8ff;border-radius:2px}
-.level{margin-bottom:12px}
-.level:last-child{margin-bottom:0}
-.level-top{display:flex;justify-content:space-between;font-size:13px;color:#9ec8e0;margin-bottom:5px}
-.level-top b{color:#eef5fb;font-weight:600}
+.pill .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+.on{background:var(--ok-bg);color:var(--ok)}
+.off{background:var(--danger-bg);color:#ff8f8f}
+
+/* ===== Níveis ===== */
+.level{margin-bottom:14px}
+.level:last-child{margin-bottom:2px}
+.level-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--text-dim);margin-bottom:6px}
+.level-top b{color:var(--text);font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
 .bar{background:rgba(0,40,80,.35);border-radius:8px;height:20px;overflow:hidden}
 .fill{
   height:100%;width:0%;background:linear-gradient(90deg,#1a8fd9,#4ec8ff);
   border-radius:8px;font-size:11px;font-weight:600;line-height:20px;color:#fff;
-  text-align:center;transition:width .4s ease
+  text-align:center;transition:width .4s ease;font-variant-numeric:tabular-nums;
 }
-.hint{font-size:12px;color:#ffffff;margin:0 0 12px;line-height:1.4}
-.row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:20px}
+.level-note{
+  display:flex;gap:7px;align-items:flex-start;margin-top:12px;padding:9px 11px;
+  background:rgba(79,195,255,.07);border:1px solid rgba(79,195,255,.16);border-radius:var(--radius-sm);
+  font-size:11.5px;color:var(--text-dim);line-height:1.4
+}
+.level-note svg{flex-shrink:0;margin-top:1px;color:var(--accent)}
+
+/* ===== Controles ===== */
+.field-row{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px}
+label.field-label{font-size:11px;color:var(--text-faint);font-weight:600;letter-spacing:.3px;text-transform:uppercase;margin-bottom:6px;display:block}
 select,input[type=time]{
-  font-family:Arial,sans-serif;font-size:14px;color:#eef5fb;
-  background:rgba(0,40,80,.35);border:1px solid rgba(120,190,255,.28);
-  border-radius:10px;padding:10px 12px;outline:none
+  font-family:inherit;font-size:13px;font-weight:600;color:var(--text);
+  background:rgba(0,30,60,.4);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px 6px;outline:none;
+  transition:border-color .15s;box-sizing:border-box;
 }
-select{min-width:110px;flex:1;max-width:160px;cursor:pointer}
-input[type=time]{width:112px}
+select:focus,input[type=time]:focus{border-color:var(--border-strong)}
+select{
+  cursor:pointer;width:130px;min-width:130px;max-width:130px;flex:none;
+  -webkit-appearance:none;appearance:none;
+}
+input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
+
 .btn{
-  font-family:Arial,sans-serif;font-size:14px;font-weight:600;border:none;border-radius:10px;
-  padding:11px 18px;cursor:pointer;min-width:100px;transition:opacity .15s,transform .12s
+  font-family:inherit;font-size:13.5px;font-weight:700;border:none;border-radius:var(--radius-sm);
+  padding:12px 16px;cursor:pointer;flex:1;min-width:100px;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  transition:filter .15s,transform .12s;letter-spacing:.2px;
 }
-.btn:active{opacity:.85;transform:scale(.97)}
-.btn-on{background:#3dd68c;color:#05331c}
-.btn-off{background:#ff6b6b;color:#fff}
-.btn-save{background:#4db8ff;color:#043657;min-width:88px}
+.btn:active{filter:brightness(.9);transform:scale(.97)}
+.btn-on{background:linear-gradient(155deg,#48e0a0,#2fb87f);color:#053323}
+.btn-off{background:linear-gradient(155deg,#ff8080,#f04a4a);color:#3a0a0a}
+.btn-save{background:linear-gradient(155deg,var(--accent),var(--accent-2));color:#052235;flex:none;padding:10px 14px}
+.btn-row{display:flex;gap:10px;margin-top:2px}
+
 .msg{
-  display:none;margin-top:8px;font-size:12px;text-align:center;
-  background:rgba(77,184,255,.14);border:1px solid rgba(77,184,255,.32);
-  border-radius:8px;padding:7px 10px;color:#d6eefc
+  display:none;margin-top:10px;font-size:12px;text-align:center;
+  background:rgba(79,195,255,.12);border:1px solid rgba(79,195,255,.28);
+  border-radius:var(--radius-sm);padding:8px 10px;color:#d6eefc;font-weight:600;
 }
-.pill{
-  display:inline-flex;align-items:center;gap:6px;margin:0;flex-shrink:0;
-  padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600
-}
-.pill .d{width:6px;height:6px;border-radius:50%;background:currentColor}
-.on{background:rgba(61,214,140,.18);color:#3dd68c}
-.off{background:rgba(255,107,107,.16);color:#ff8a8a}
-.times{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:10px 0 4px}
-.times label{font-size:12px;color:#9ec8e0;display:flex;flex-direction:column;gap:5px;align-items:flex-start}
-.center{text-align:center}
-.sub{margin:0 0 8px;font-size:12px;color:#8ab4cc}
+
+.times{display:flex;align-items:flex-end;justify-content:flex-start;gap:8px;flex-wrap:wrap;margin:0;flex:1;min-width:0}
+.times label,.time-label{font-size:11px;color:var(--text-faint);font-weight:600;text-transform:uppercase;letter-spacing:.3px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+
+.footer-note{text-align:center;font-size:11px;color:var(--text-faint);margin-top:6px;letter-spacing:.2px}
+
 /* Tela de bloqueio — mesmo visual da página locked do firmware */
 #lockedScreen{
   display:none;position:fixed;top:0;left:0;right:0;bottom:0;
@@ -105,14 +153,26 @@ input[type=time]{width:112px}
   <div id="lockedScreen">
     <p>Entre em contato com a<br>BenTech</p>
   </div>
+
   <!-- Conteúdo normal -->
   <div id="mainContent" class="wrap">
+
     <div class="header">
       <img src="https://davidbehn.github.io/bentech-assets/logo.png" alt="BenTech">
       <h1>Controle de Abastecimento</h1>
     </div>
+
     <div class="card">
-      <h2>NÍVEIS</h2>
+      <div class="card-head">
+        <div class="card-title">
+          <div class="card-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c4 5 7 8.5 7 12.5A7 7 0 0 1 5 14.5C5 10.5 8 7 12 2Z"/></svg>
+          </div>
+          <h2>Níveis de Água</h2>
+        </div>
+      </div>
+      <p class="card-desc">Leitura em tempo real da caixa d'água e do reservatório</p>
+
       <div class="level">
         <div class="level-top"><span>Caixa d'Água</span><b id="waterTankValue">0%</b></div>
         <div class="bar"><div id="waterTankLevel" class="fill">0%</div></div>
@@ -121,66 +181,119 @@ input[type=time]{width:112px}
         <div class="level-top"><span>Reservatório</span><b id="reservoirValue">0%</b></div>
         <div class="bar"><div id="reservoirLevel" class="fill">0%</div></div>
       </div>
+
+      <div class="level-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span>O acionamento automático só ocorre com o reservatório entre 50% e 100%</span>
+      </div>
     </div>
-    <p class="hint">Reservatório entre 50% a 100%, para acionamento automático</p>
+
     <div class="card">
-      <h2>BOMBA AUTOMÁTICA</h2>
-      <p class="sub">Nível da caixa para ligar a bomba</p>
-      <div class="row">
-        <select id="selector">
-          <option value="0">0%</option>
-          <option value="25">25%</option>
-          <option value="50">50%</option>
-          <option value="75">75%</option>
-          <option value="99">OFF</option>
-        </select>
+      <div class="card-head">
+        <div class="card-title">
+          <div class="card-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h2>Bomba Automática</h2>
+        </div>
+      </div>
+      <p class="card-desc">Liga a bomba quando a caixa atingir o nível selecionado</p>
+
+      <div class="field-row">
+        <div style="flex:1;min-width:0">
+          <label class="field-label" for="selector">Nível para ligar</label>
+          <select id="selector">
+            <option value="0">0%</option>
+            <option value="25">25%</option>
+            <option value="50">50%</option>
+            <option value="75">75%</option>
+            <option value="99">OFF (desativado)</option>
+          </select>
+        </div>
         <button class="btn btn-save" onclick="saveValue()">Salvar</button>
       </div>
       <p id="saveMsg" class="msg"></p>
     </div>
+
     <div class="card">
-      <div class="card-title">
-        <h2>HORÁRIO DE FUNCIONAMENTO</h2>
+      <div class="card-head">
+        <div class="card-title">
+          <div class="card-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </div>
+          <h2>Horário de Operação</h2>
+        </div>
         <span id="scheduleStatus" class="pill off"><span class="d"></span>Desativado</span>
       </div>
-      <p class="sub">Limita quando o sistema pode acionar</p>
-      <div class="row">
-        <select id="scheduleEnable">
-          <option value="0">Desativado</option>
-          <option value="1">Ativado</option>
-        </select>
+      <p class="card-desc">Restringe o período em que o sistema pode ser acionado</p>
+
+      <div class="field-row">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;width:100%;flex-wrap:nowrap">
+          <div>
+            <label class="field-label" for="scheduleEnable">Status</label>
+            <select id="scheduleEnable">
+              <option value="0">Desativado</option>
+              <option value="1">Ativado</option>
+            </select>
+          </div>
+          <label class="time-label">Das<input type="time" id="startTime" value="06:00"></label>
+          <label class="time-label">Até<input type="time" id="endTime" value="23:00"></label>
+        </div>
       </div>
-      <div class="times">
-        <label>Das<input type="time" id="startTime" value="06:00"></label>
-        <label>Até<input type="time" id="endTime" value="23:00"></label>
-      </div>
-      <div class="row" style="margin-top:8px">
+      <div class="field-row" style="justify-content:flex-end;margin-top:10px">
         <button class="btn btn-save" onclick="saveSchedule()">Salvar</button>
       </div>
       <p id="scheduleMsg" class="msg"></p>
     </div>
+
     <div class="card">
-      <div class="card-title">
-        <h2>BOMBA MANUAL</h2>
+      <div class="card-head">
+        <div class="card-title">
+          <div class="card-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v8"/><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/></svg>
+          </div>
+          <h2>Bomba Manual</h2>
+        </div>
         <span id="pumpStatus" class="pill off"><span class="d"></span>Desligado</span>
       </div>
-      <div class="row">
-        <button class="btn btn-on" onclick="sendCommand('pump:on', true)">Ligar</button>
-        <button class="btn btn-off" onclick="sendCommand('pump:off', false)">Desligar</button>
+      <p class="card-desc">Ligue ou desligue a bomba manualmente</p>
+
+      <div class="btn-row">
+        <button class="btn btn-on" onclick="sendCommand('pump:on', true)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5Z"/></svg>Ligar
+        </button>
+        <button class="btn btn-off" onclick="sendCommand('pump:off', false)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>Desligar
+        </button>
       </div>
       <p id="msg" class="msg"></p>
     </div>
+
     <div class="card">
-      <div class="card-title">
-        <h2>DISPOSITIVO PARALELO</h2>
+      <div class="card-head">
+        <div class="card-title">
+          <div class="card-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 8Z"/></svg>
+          </div>
+          <h2>Dispositivo Paralelo</h2>
+        </div>
         <span id="deviceStatus" class="pill off"><span class="d"></span>Desligado</span>
       </div>
-      <div class="row">
-        <button class="btn btn-on" onclick="sendCommand('device:on', true, 'deviceStatus')">Ligar</button>
-        <button class="btn btn-off" onclick="sendCommand('device:off', false, 'deviceStatus')">Desligar</button>
+      <p class="card-desc">Controla um equipamento extra conectado ao sistema</p>
+
+      <div class="btn-row">
+        <button class="btn btn-on" onclick="sendCommand('device:on', true, 'deviceStatus')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5Z"/></svg>Ligar
+        </button>
+        <button class="btn btn-off" onclick="sendCommand('device:off', false, 'deviceStatus')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>Desligar
+        </button>
       </div>
     </div>
+
+    <p class="footer-note">BenTech · Soluções em Automação</p>
   </div>
+
   <script>
     const CLIENTE = "Benjamin";
     const base = `Bentech/${CLIENTE}/abastecimento`;
